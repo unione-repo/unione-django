@@ -1,0 +1,25 @@
+[build-system]
+requires = ["setuptools>=61"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "unione-django"
+version = "1.1.2"
+description = "UniOne Web API for Django: API client, email backend, webhooks"
+readme = "README.md"
+requires-python = ">=3.8"
+license = { text = "MIT" }
+authors = [{ name = "UniOne" }]
+keywords = ["unione", "django", "email", "webhook"]
+classifiers = ["Framework :: Django"]
+dependencies = ["unione-sdk>=1.1.2", "Django>=4.2"]
+
+[project.urls]
+Homepage = "https://github.com/unione-repo/unione-django"
+Documentation = "https://docs.unione.io/en/web-api-ref"
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.setuptools.package-data]
+"*" = ["py.typed"]
