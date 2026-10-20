@@ -10,8 +10,8 @@ from unione.client import ApiClient, Configuration, base_url_for
 from ._settings import Settings
 
 __all__ = ["get_client", "get_api_client", "api_client_for", "settings", "Settings"]
-__version__ = "1.1.2"
-PLATFORM = "django.1.1.2"
+__version__ = "1.1.3"
+PLATFORM = "django.1.1.3"
 """The package and its version in the "platform" query parameter of the requests, before the SDK one."""
 
 
