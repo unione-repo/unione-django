@@ -14,4 +14,6 @@ class UnioneConfig(AppConfig):
     verbose_name = "UniOne"
 
     def ready(self):
+        from . import checks  # noqa: F401  (registers the system checks)
+
         setting_changed.connect(_reset, dispatch_uid="unione_wrapper.reset")

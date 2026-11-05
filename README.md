@@ -2,7 +2,7 @@
 
 [![Django](https://img.shields.io/pypi/v/unione-django)](https://pypi.org/project/unione-django/) [![License: MIT](https://img.shields.io/badge/license-MIT-blue)](LICENSE)
 
-Django integration of the [UniOne Python SDK](https://github.com/unione-repo/unione-python-sdk) (``): the API client in the settings (`get_client()`), a webhook endpoint with signature check, a Django email transport that sends through `email/send`.
+Django integration of the [UniOne Python SDK](https://github.com/unione-repo/unione-python-sdk) (`unione-sdk`): the API client in the settings (`get_client()`), a webhook endpoint with signature check, a Django email transport that sends through `email/send`.
 
 [API reference](https://docs.unione.io/en/web-api-ref) · Docs for LLMs: [llms.txt](https://docs.unione.io/llms.txt)
 
@@ -49,7 +49,7 @@ urlpatterns = [..., path("unione/", include("unione_wrapper.urls"))]  # /unione/
 | `UNIONE["TIMEOUT"]` | `UNIONE_TIMEOUT` | `30` | Request timeout, seconds. |
 | `UNIONE["WEBHOOK_KEY"]` | `UNIONE_WEBHOOK_KEY` |  | API key the webhooks are signed with (the key of the user/project of the webhook), if it differs from the API key. |
 
-Settings of the `UNIONE` dict win over the environment variables. The webhook URL is set by `include("unione_wrapper.urls")`; the view is `csrf_exempt`.
+Settings of the `UNIONE` dict win over the environment variables. The webhook URL is set by `include("unione_wrapper.urls")`; the view is `csrf_exempt`. `manage.py check` warns when the API key is not set or the webhook endpoint has no URL. Without webhooks `UNIONE["WEBHOOK_ENABLED"] = False` (or the environment variable `UNIONE_WEBHOOK_ENABLED=false`) turns the check of the webhook URL off; or silence it: `SILENCED_SYSTEM_CHECKS = ["unione_wrapper.W002"]`.
 
 ## Sending mail
 
@@ -124,6 +124,10 @@ def send_email(request):
     ))
     return JsonResponse({"job_id": response.job_id})
 ```
+
+### Errors
+
+A failed send of the email backend raises the SDK `ApiError` (unless `fail_silently`), the API client too: `kind` tells what failed (api, network, timeout, invalid_response, invalid_request), `retryable` whether a repeat may succeed (network, timeout, HTTP 429 and 5xx), `hint` how to fix an API error and `api_message` the message of the API.
 
 ## No domain yet: the test sandbox domain
 
